@@ -54,4 +54,30 @@ To sign the cdn,
 1. Use openssl to generate private_key.pem using `openssl genrsa -out private_key.pem 2048`
 2. Generate public key for cloudfront using private key `openssl rsa -pubout -in private_key.pem -out public_key.pem`
 
+When serving from S3, make sure to add CORS config with public bucket or relative objects to be signed:
+```
+[
+    {
+        "AllowedHeaders": [
+            "*"
+        ],
+        "AllowedMethods": [
+           "GET",
+            "PUT",
+            "POST",
+            "DELETE"
+        ],
+        "AllowedOrigins": [
+            "*"
+        ],
+        "ExposeHeaders": [
+            "x-amz-server-side-encryption",
+            "x-amz-request-id",
+            "x-amz-id-2"
+        ],
+        "MaxAgeSeconds": 3000
+    }
+]
+```
+
 Any updates to S3, need to invalidate in CDN.
